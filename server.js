@@ -48,6 +48,41 @@ app.get('/api/vehicles', (req, res)=> {
   })
 })
 
+//============NUMBER 3 AND 4===================//
+// app.post('/api/users', (req, res)=> {
+//   app.post('db').
+// })
+
+// app.post('/api/vehicles', (req, res)=> {
+//   app.post('db').
+// })
+
+app.get('/api/user/:userId/vehiclecount', (req, res)=> {
+  app.get('db').countVehiclesByUser(req.params.userId).then(count => {
+    res.status(200).send(count);
+  })
+})
+
+app.get('/api/user/:userId/vehicle', (req, res)=> {
+  app.get('db').findAllVehiclesByUserId(req.params.userId).then(vehicles=> {
+    res.status(200).send(vehicles);
+  })
+})
+
+app.get('/api/vehicle', (req, res)=> {
+  if(req.query.userEmail){
+    app.get('db').findAllVehiclesByUser(req.query.userEmail).then(vehicles=> {
+      res.status(200).send(vehicles);
+    })
+  } else if(req.query.userFirstStart) {
+    app.get('db').findVehiclesByUserName(req.query.userFirstStart + "%").then(vehicles => {
+      res.status(200).send(vehicles);
+    })
+  }
+  
+})
+
+
 
 
 
