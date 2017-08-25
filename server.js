@@ -13,11 +13,11 @@ app.use(cors());
 // You need to complete the information below to connect
 // to the assessbox database on your postgres server.
 massive({
-  host: 'ec2-184-72-243-166.compute-1.amazonaws.com',
-  port: 5432,
-  database: 'dec7p1t5slgkct',
-  user: 'zaeyncyawhxlia',
-  password: 'f89d1c496f5a840680c5d2a8e455364e148818ff5bc62118a24f76cd02e2f615',
+  host: //host,
+  port: //port,
+  database: //database,
+  user: //user,
+  password: //password,
   ssl:true
 }).then( db => {
   app.set('db', db);
@@ -48,14 +48,18 @@ app.get('/api/vehicles', (req, res)=> {
   })
 })
 
-//============NUMBER 3 AND 4===================//
-// app.post('/api/users', (req, res)=> {
-//   app.post('db').
-// })
 
-// app.post('/api/vehicles', (req, res)=> {
-//   app.post('db').
-// })
+app.post('/api/users', (req, res)=> {
+  app.get('db').addUser([req.body.name, req.body.email]).then(users => {
+    res.status(200).send(users);
+  })
+})
+
+app.post('/api/vehicles', (req, res)=> {
+  app.get('db').addVehicle([req.body.make, req.body.model, req.body.year, req.body.owner_id]).then(vehicles=> {
+    res.status(200).send(vehicles);
+  })
+})
 
 app.get('/api/user/:userId/vehiclecount', (req, res)=> {
   app.get('db').countVehiclesByUser(req.params.userId).then(count => {
@@ -82,9 +86,30 @@ app.get('/api/vehicle', (req, res)=> {
   
 })
 
+app.get('/api/newervehiclesbyyear', (req, res)=> {
+  app.get('db').getVehiclesByYear().then(vehicles=> {
+    res.status(200).send(vehicles)
+  })
+})
 
 
+app.put('/api/vehicle/:vehicleId/user/:userId', (req, res)=> {
+  app.get('db').changeOwnership([req.params.vehicleId, req.params.userId]).then(vehicles=> {
+    res.status(200).send(vehicles);
+  })
+})
 
+app.delete('/api/user/:userId/vehicle/:vehicleId', (req, res)=> {
+  app.get('db').deleteOwnership([req.params.userId, req.params.vehicleId]).then(vehicles=> {
+    res.status(200).send(vehicles);
+  })
+})
+
+app.delete('/api/vehicle/:vehicleId', (req, res)=> {
+  app.get('db').deleteVehicle(req.params.vehicleId).then(vehicles=> {
+    res.status(200).send(vehicles);
+  })
+})
 
 
 // ===== Do not change port ===============
